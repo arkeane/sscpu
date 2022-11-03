@@ -15,6 +15,18 @@
 </head>
 
 <body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <h1>SSCPU WASM Emulator</h1>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/arkeane/sscpu">GitHub Repo</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
     <script type="module">
         import init, { sanity_check, cpu_run } from "./pkg/sscpu.js";
 
@@ -87,10 +99,11 @@
 
 
     <div class="container">
-        <h1>SSCPU WASM Emulator</h1><br>
+        
         <div class="container">
             <button type="button" class="btn btn-secondary" onclick="load_from_server()">Load SSASM example</button>
-            <a href="./ssasm/conditional.ssasm" download="conditional.ssasm" class="btn btn-secondary">Download SSASM example</a>
+            <a href="./ssasm/conditional.ssasm" download="conditional.ssasm" class="btn btn-secondary">Download SSASM
+                example</a>
         </div>
         <div class="row">
             <div class="col">
