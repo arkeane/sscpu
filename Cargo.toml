@@ -1,10 +1,10 @@
 [package]
-name = "sscpu_wasm"
+name = "sscpu"
 version = "0.1.0"
 edition = "2021"
-description = "sscpu wasm"
+description = "Rust and WebAssembly proof of concept ISA emulator"
 license = "LICENSE.md"
-repository = ""
+repository = "https://github.com/arkeane/sscpu"
 
 [lib]
 crate-type = ["cdylib"]
