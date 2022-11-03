@@ -35,9 +35,6 @@
             // convert each line first 16 chars of data_text to a number from binary to decimal
             const data = data_text.split("\n").map(line => parseInt(line.substring(0, 16), 2));
 
-            console.log(program);
-            console.log(data);
-
             JsValue = window.exec(program, data);
             // send the json registers to registers textarea
             document.getElementById("registers").value = JSON.stringify(JsValue.registers);
