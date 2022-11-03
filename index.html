@@ -65,17 +65,38 @@
             }
             reader.readAsText(file);
         }
+
+        // download a file from server and load it into the program and data textareas
+        function load_from_server() {
+            const request = new XMLHttpRequest();
+            request.open("GET", "./ssasm/conditional.ssasm", true);
+            request.onload = function (e) {
+                const text = e.target.response;
+                const split = text.split("--data--");
+                document.getElementById("program").value = split[0];
+                // delete last line from program as it is empty
+                document.getElementById("program").value = document.getElementById("program").value.substring(0, document.getElementById("program").value.length - 1);
+                document.getElementById("data").value = split[1];
+                // delete first line from data
+                document.getElementById("data").value = document.getElementById("data").value.substring(document.getElementById("data").value.indexOf("\n") + 1);
+            }
+            request.send();
+        }
     </script>
 
 
 
     <div class="container">
         <h1>SSCPU WASM Emulator</h1><br>
+        <div class="container">
+            <button type="button" class="btn btn-secondary" onclick="load_from_server()">Load SSASM example</button>
+            <a href="./ssasm/conditional.ssasm" download="conditional.ssasm" class="btn btn-secondary">Download SSASM example</a>
+        </div>
         <div class="row">
             <div class="col">
-                <label class="form-label" for="program">Program (16-bit binary instructions) one each line</label>
+                <br><label class="form-label" for="program">Instructions</label>
                 <textarea class="form-control" id="program" rows="10" cols="50"></textarea>
-                <label class="form-label" for="data">Data (16-bit binary numbers) one each line</label>
+                <label class="form-label" for="data">--data--</label>
                 <textarea class="form-control" id="data" rows="10" cols="50"></textarea><br>
                 <div class="input-group">
                     <input type="file" class="form-control" id="ssasm" aria-describedby="inputGroupFileAddon04"
