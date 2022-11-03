@@ -1,15 +1,17 @@
-
+use gloo_utils::format::JsValueSerdeExt;
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-extern {
+extern "C" {
     pub fn alert(s: &str);
-}
 
+}
+#[derive(Serialize, Deserialize)]
 pub struct Cpu {
     pub registers: [u16; 8], // 8 registers
-    pub memory: [u16; 4096], // memory
-    pub stack: [u16; 256],   // stack
+    pub memory: Vec<u16>,    // memory
+    pub stack: Vec<u16>,     // stack
     pub pc: u16,             // program counter
     pub sp: u16,             // stack pointer
 }
@@ -18,8 +20,8 @@ pub struct Cpu {
 pub fn reset_cpu() -> Cpu {
     Cpu {
         registers: [0; 8],
-        memory: [0; 4096],
-        stack: [0; 256],
+        memory: [0; 4096].to_vec(),
+        stack: [0; 256].to_vec(),
         pc: 256,
         sp: 0,
     }
@@ -77,6 +79,7 @@ fn pop(cpu: &mut Cpu, r0: u16) {
     }
     cpu.sp -= 1;
     cpu.registers[r0 as usize] = cpu.stack[cpu.sp as usize];
+    cpu.stack[cpu.sp as usize] = 0;
 }
 
 // move R1 to R0
@@ -201,4 +204,8 @@ pub fn decode_and_execute(cpu: &mut Cpu) -> bool {
 
     cpu.pc += 1;
     true
+}
+
+pub fn send_cpu_to_js(cpu: &Cpu) -> JsValue {
+    JsValue::from_serde(cpu).unwrap()
 }
