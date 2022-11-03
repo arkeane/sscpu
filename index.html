@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SSCPU</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <script type="module">
+        import init, { sanity_check, cpu_run } from "./pkg/sscpu_wasm.js";
+        init().then(() => {
+            sanity_check();
+        });
+    </script>
+</body>
+
+</html>
