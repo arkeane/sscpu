@@ -170,10 +170,6 @@ fn not(cpu: &mut Cpu,r0: u16, r1: u16) {
     cpu.registers[r1 as usize] = !cpu.registers[r0 as usize];
 }
 
-
-
-
-
 fn nop(_cpu: &mut Cpu) {}
 
 pub fn decode_and_execute(cpu: &mut Cpu) -> bool {
