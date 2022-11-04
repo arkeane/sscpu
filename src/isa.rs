@@ -49,14 +49,14 @@ pub fn split_instruction(cpu: &Cpu) -> [u16; 4] {
     let instruction = cpu.memory[cpu.pc as usize];
     // opcode is first 4 bits
     let opcode = instruction >> 12;
-    // option is next 4 bits
-    let option = (instruction >> 8) & 0b1111;
+    // k is next 4 bits
+    let k = (instruction >> 8) & 0b1111;
     // r0 is next 4 bits
     let a = (instruction >> 4) & 0b1111;
     // r1 is last 4 bits
     let b = instruction & 0b1111;
 
-    [opcode, option, a, b]
+    [opcode, k, a, b]
 }
 
 // Instruction Set implementation
@@ -82,122 +82,119 @@ fn pop(cpu: &mut Cpu, r0: u16) {
     cpu.stack[cpu.sp as usize] = 0;
 }
 
-// move R1 to R0
+// move R0 to R1
 // 0011
-fn mov(cpu: &mut Cpu, r1: u16, r0: u16) {
+fn mov(cpu: &mut Cpu, r0: u16, r1: u16) {
     cpu.registers[r0 as usize] = cpu.registers[r1 as usize];
 }
 
 // jump to address
 // 0100
-fn jmp(cpu: &mut Cpu, option: u16, a: u16, b: u16) {
-    // create a 12 bit u32 address with option, a and b
-    let address = option << 8 | a << 4 | b;
+fn jmp(cpu: &mut Cpu, k: u16, a: u16, b: u16) {
+    // create a 12 bit u32 address with k, a and b
+    let address = k << 8 | a << 4 | b;
     cpu.pc = address;
 }
 
 // branch if R0 is Equal to R1
 // 0101
-fn beq(cpu: &mut Cpu, option: u16, r1: u16, r0: u16) {
+fn beq(cpu: &mut Cpu, offset: u16, r0: u16, r1: u16) {
     if cpu.registers[r0 as usize] == cpu.registers[r1 as usize] {
-        cpu.pc += option;
+        cpu.pc += offset;
     }
 }
 
-// branch if R0 is Equal to R1
+// branch if R0 is not Equal to R1
 // 0110
-fn bne(cpu: &mut Cpu, option: u16, r1: u16, r0: u16) {
+fn bne(cpu: &mut Cpu, offset: u16, r0: u16, r1: u16) {
     if cpu.registers[r0 as usize] != cpu.registers[r1 as usize] {
-        cpu.pc += option;
+        cpu.pc += offset;
     }
 }
 
 // load data from one of first 255 locations in memory
 // 0111
-fn stor(cpu: &mut Cpu, option: u16, a: u16, b: u16) {
+fn stor(cpu: &mut Cpu, r0: u16, a: u16, b: u16) {
     // create a 8 bit u32 address with a and b
     let address = (a as u32) << 4 | (b as u32);
-    cpu.memory[address as usize] = cpu.registers[option as usize];
+    cpu.memory[address as usize] = cpu.registers[r0 as usize];
 }
 
 // load data from one of first 255 locations in memory
 // 1000
-fn load(cpu: &mut Cpu, option: u16, a: u16, b: u16) {
+fn load(cpu: &mut Cpu, r0: u16, a: u16, b: u16) {
     // create a 8 bit u32 address with a and b
     let address = (a as u32) << 4 | (b as u32);
-    cpu.registers[option as usize] = cpu.memory[address as usize];
+    cpu.registers[r0 as usize] = cpu.memory[address as usize];
 }
 
-// add A to R0
+// add R0 to R1 and store in R2
 // 1001
-fn addi(cpu: &mut Cpu, a: u16, r0: u16) {
-    cpu.registers[r0 as usize] += a;
+fn add(cpu: &mut Cpu, r0: u16, r1: u16, r2: u16) {
+    cpu.registers[r2 as usize] = cpu.registers[r0 as usize] + cpu.registers[r1 as usize];
 }
 
-// add R1 to R0 and store in R0
+// subtract R1 from R0 and store in R2
 // 1010
-fn addr(cpu: &mut Cpu, r1: u16, r0: u16) {
-    cpu.registers[r0 as usize] += cpu.registers[r1 as usize];
+fn sub(cpu: &mut Cpu, r0: u16, r1: u16, r2: u16) {
+    let a = cpu.registers[r0 as usize];
+    let b = cpu.registers[r1 as usize];
+    if b > a {
+        cpu.registers[r2 as usize] = 0;
+        return;
+    }
+    cpu.registers[r2 as usize] = (a - b) as u16;
 }
 
-// subtract R1 from R0 and store in R0
+// multiply R0 with R1 and store in R2
 // 1011
-fn subi(cpu: &mut Cpu, a: u16, r0: u16) {
-    let b = cpu.registers[r0 as usize];
-    if a > b {
-        cpu.registers[r0 as usize] = 0;
-        return;
-    }
-    let c = b - a;
-    cpu.registers[r0 as usize] = c;
+fn mul(cpu: &mut Cpu, r0: u16, r1: u16, r2: u16) {
+    cpu.registers[r2 as usize] = cpu.registers[r0 as usize] * cpu.registers[r1 as usize];
 }
 
-// subtract R1 from R0 and store in R0
+// bitwise AND R0 with R1 and store in R2
 // 1100
-fn subr(cpu: &mut Cpu, r1: u16, r0: u16) {
-    let b = cpu.registers[r0 as usize];
-    let a = cpu.registers[r1 as usize];
-    if a > b {
-        cpu.registers[r0 as usize] = 0;
-        return;
-    }
-    let c = b - a;
-    cpu.registers[r0 as usize] = c;
+fn and(cpu: &mut Cpu, r0: u16, r1: u16, r2: u16) {
+    cpu.registers[r2 as usize] = cpu.registers[r0 as usize] & cpu.registers[r1 as usize];
 }
 
-// multiply A with R0 and store in R0
+// bitwise OR R0 with R1 and store in R2
 // 1101
-fn muli(cpu: &mut Cpu, a: u16, r0: u16) {
-    cpu.registers[r0 as usize] *= a;
+fn or(cpu: &mut Cpu, r0: u16, r1: u16, r2: u16) {
+    cpu.registers[r2 as usize] = cpu.registers[r0 as usize] | cpu.registers[r1 as usize];
 }
 
-// multiply R1 with R0 and store in R0
+// NOT R0 and store in R1
 // 1110
-fn mulr(cpu: &mut Cpu, r1: u16, r0: u16) {
-    cpu.registers[r0 as usize] *= cpu.registers[r1 as usize];
+fn not(cpu: &mut Cpu,r0: u16, r1: u16) {
+    cpu.registers[r1 as usize] = !cpu.registers[r0 as usize];
 }
+
+
+
+
 
 fn nop(_cpu: &mut Cpu) {}
 
 pub fn decode_and_execute(cpu: &mut Cpu) -> bool {
-    let [opcode, option, a, b] = split_instruction(cpu);
+    let [opcode, k, a, b] = split_instruction(cpu);
 
     match opcode {
         0b0000 => return false,
         0b0001 => push(cpu, a),
         0b0010 => pop(cpu, b),
         0b0011 => mov(cpu, a, b),
-        0b0100 => jmp(cpu, option, a, b),
-        0b0101 => beq(cpu, option, a, b),
-        0b0110 => bne(cpu, option, a, b),
-        0b0111 => stor(cpu, option, a, b),
-        0b1000 => load(cpu, option, a, b),
-        0b1001 => addi(cpu, a, b),
-        0b1010 => addr(cpu, a, b),
-        0b1011 => subi(cpu, a, b),
-        0b1100 => subr(cpu, a, b),
-        0b1101 => muli(cpu, a, b),
-        0b1110 => mulr(cpu, a, b),
+        0b0100 => jmp(cpu, k, a, b),
+        0b0101 => beq(cpu, k, a, b),
+        0b0110 => bne(cpu, k, a, b),
+        0b0111 => stor(cpu, k, a, b),
+        0b1000 => load(cpu, k, a, b),
+        0b1001 => add(cpu, k, a, b),
+        0b1010 => sub(cpu, k, a, b),
+        0b1011 => mul(cpu, k, a, b),
+        0b1100 => and(cpu, k, a, b),
+        0b1101 => or(cpu, k, a, b),
+        0b1110 => not(cpu, a, b),
         0b1111 => nop(cpu),
         _ => alert(&format!("Unknown opcode: {}", opcode)),
     }

@@ -19,12 +19,12 @@ fn opcode_name(opcode: u16) -> &'static str {
         0b0110 => "BNE",
         0b0111 => "STOR",
         0b1000 => "LOAD",
-        0b1001 => "ADDI",
-        0b1010 => "ADDR",
-        0b1011 => "SUBR",
-        0b1100 => "SUBI",
-        0b1101 => "MULI",
-        0b1110 => "MULR",
+        0b1001 => "ADD",
+        0b1010 => "SUB",
+        0b1011 => "MUL",
+        0b1100 => "AND",
+        0b1101 => "OR",
+        0b1110 => "NOT",
         0b1111 => "NOP",
         _ => "unknown",
     }
@@ -32,12 +32,12 @@ fn opcode_name(opcode: u16) -> &'static str {
 
 // print the current state of the cpu
 fn print_state(cpu: &isa::Cpu) {
-    let [opcode, option, a, b] = isa::split_instruction(cpu);
+    let [opcode, k, a, b] = isa::split_instruction(cpu);
     log(&format!(
-        "Instruction:      Opcode: {:04x}({:?}), option: {:04b}, a: {:04b}, b: {:04b}",
+        "Instruction:      Opcode: {:04x}({:?}), k: {:04b}, a: {:04b}, b: {:04b}",
         opcode,
         opcode_name(opcode),
-        option,
+        k,
         a,
         b
     ));
