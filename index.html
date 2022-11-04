@@ -139,9 +139,9 @@
         <table class="table table-striped">
             <tr>
                 <td>Opcode</td>
-                <td>Option</td>
-                <td>From</td>
-                <td>To</td>
+                <td>4-bit</td>
+                <td>4-bit</td>
+                <td>4-bit</td>
                 <td>Instruction</td>
                 <td>Description</td>
             </tr>
@@ -156,7 +156,7 @@
             <tr>
                 <td>0001</td>
                 <td>0000</td>
-                <td>R</td>
+                <td>R0</td>
                 <td>0000</td>
                 <td>PUSH</td>
                 <td>Pushes the value of register R onto the stack, if stack pointer is = 256 Stack Overflow is thrown
@@ -166,7 +166,7 @@
                 <td>0010</td>
                 <td>0000</td>
                 <td>0000</td>
-                <td>R</td>
+                <td>R0</td>
                 <td>POP</td>
                 <td>Pops the value of the stack into registe R, if stack pointer is = 0 Stack Out of Bound is thrown
                 </td>
@@ -174,10 +174,10 @@
             <tr>
                 <td>0011</td>
                 <td>0000</td>
-                <td>R1</td>
                 <td>R0</td>
+                <td>R1</td>
                 <td>MOV</td>
-                <td>Moves the value of register R1 into register R0</td>
+                <td>Moves the value of register R0 into register R1</td>
             </tr>
             <tr>
                 <td>0100</td>
@@ -190,22 +190,22 @@
             <tr>
                 <td>0101</td>
                 <td>Offset(4-bit)</td>
-                <td>R1</td>
                 <td>R0</td>
+                <td>R1</td>
                 <td>BEQ</td>
                 <td>Sets PC+=Offset if R0 == R1</td>
             </tr>
             <tr>
                 <td>0110</td>
                 <td>Offset(4-bit)</td>
-                <td>R1</td>
                 <td>R0</td>
+                <td>R1</td>
                 <td>BNE</td>
                 <td>Sets PC+=Offset if R0 != R1</td>
             </tr>
             <tr>
                 <td>0111</td>
-                <td>R</td>
+                <td>R0</td>
                 <td>8-bit Memory Address</td>
                 <td></td>
                 <td>STOR</td>
@@ -213,7 +213,7 @@
             </tr>
             <tr>
                 <td>1000</td>
-                <td>R</td>
+                <td>R0</td>
                 <td>8-bit Memory Address</td>
                 <td></td>
                 <td>LOAD</td>
@@ -221,51 +221,51 @@
             </tr>
             <tr>
                 <td>1001</td>
-                <td>0000</td>
-                <td>A</td>
-                <td>R</td>
-                <td>ADDI</td>
-                <td>Adds the value of A to the value of R0 and stores it in R0</td>
+                <td>R0</td>
+                <td>R1</td>
+                <td>R2</td>
+                <td>ADD</td>
+                <td>Adds the value of R0 to the value of R1 and stores it in R2</td>
             </tr>
             <tr>
                 <td>1010</td>
-                <td>0000</td>
-                <td>R1</td>
                 <td>R0</td>
-                <td>ADDR</td>
-                <td>Adds the value of R1 to the value of R0 and stores it in R0</td>
+                <td>R1</td>
+                <td>R2</td>
+                <td>SUB</td>
+                <td>Subtracts the value of R1 from the value of R0 and stores it in R2 if R1 > R0, R2 is set to 0</td>
             </tr>
             <tr>
                 <td>1011</td>
-                <td>0000</td>
-                <td>A</td>
-                <td>R</td>
-                <td>SUBI</td>
-                <td>Subtracts the value of A from the value of R0 and stores it in R0 if A > R0, R0 is set to 0 </td>
+                <td>R0</td>
+                <td>R1</td>
+                <td>R2</td>
+                <td>MUL</td>
+                <td>Multiply value of R0 to value of R1 and stores it in R2 </td>
             </tr>
             <tr>
                 <td>1100</td>
-                <td>0000</td>
-                <td>R1</td>
                 <td>R0</td>
-                <td>SUBR</td>
-                <td>Subtracts the value of R1 from the value of R0 and stores it in R0 if R1 > R0, R0 is set to 0 </td>
+                <td>R1</td>
+                <td>R2</td>
+                <td>AND</td>
+                <td>Bitwise AND between R0 and R1 and save result in R2</td>
             </tr>
             <tr>
                 <td>1101</td>
-                <td>0000</td>
-                <td>A</td>
-                <td>R</td>
-                <td>MULI</td>
-                <td>Multiply the value of A to the value of R0 and store the result in R0</td>
+                <td>R0</td>
+                <td>R1</td>
+                <td>R2</td>
+                <td>OR</td>
+                <td>Bitwise OR between R0 and R1 and save result in R2</td>
             </tr>
             <tr>
                 <td>1110</td>
                 <td>0000</td>
-                <td>R1</td>
                 <td>R0</td>
-                <td>MULR</td>
-                <td>Multiply the value of R1 to the value of R0 and store the result in R0</td>
+                <td>R1</td>
+                <td>NOT</td>
+                <td>NOT R0 and save result in R1</td>
             </tr>
             <tr>
                 <td>1111</td>
