@@ -21,7 +21,7 @@ pub fn reset_cpu() -> Cpu {
     Cpu {
         registers: [0; 8],
         memory: [0; 4096].to_vec(),
-        stack: [0; 256].to_vec(),
+        stack: [0; 16].to_vec(),
         pc: 256,
         sp: 0,
     }
@@ -64,7 +64,7 @@ pub fn split_instruction(cpu: &Cpu) -> [u16; 4] {
 // push R0 to stack
 // 0001
 fn push(cpu: &mut Cpu, r0: u16) {
-    if cpu.sp == 256 {
+    if cpu.sp == 16 {
         alert("Stack overflow");
     }
     cpu.stack[cpu.sp as usize] = cpu.registers[r0 as usize];
