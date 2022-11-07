@@ -159,14 +159,13 @@
 
 
     <div class="container">
-        
-        <div class="container">
-            <button type="button" class="btn btn-secondary" onclick="load_from_server()">Load SSASM example</button>
-            <a href="./ssasm/conditional.ssasm" download="conditional.ssasm" class="btn btn-secondary">Download SSASM
-                example</a>
-        </div>
         <div class="row">
             <div class="col">
+                <div class="container">
+                    <button type="button" class="btn btn-secondary" onclick="load_from_server()">Load SSASM example</button>
+                    <a href="./ssasm/conditional.ssasm" download="conditional.ssasm" class="btn btn-secondary">Download SSASM
+                        example</a>
+                </div>
                 <br><label class="form-label" for="program">Instructions</label>
                 <textarea class="form-control" id="program" rows="10" cols="50"></textarea>
                 <label class="form-label" for="data">--data--</label>
@@ -188,9 +187,8 @@
                 <textarea disabled class="form-control" id="pc" rows="1"></textarea>
                 <label class="form-label" for="sp">SP</label>
                 <textarea disabled class="form-control" id="sp" rows="1"></textarea>
-                <br><h6 class="text-center">Step By Step Execution</h6>
                 <!-- align button to the center -->
-                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <br><div class="d-grid gap-2 d-md-flex justify-content-md-center">
                     <button class="btn btn-primary" type="button" onclick="initcpu()">Initialize Program</button>
                     <button class="btn btn-primary" type="button" onclick="runstep()">Step Forward</button>
                     <button class="btn btn-primary" type="button" onclick="run()">Run</button>
