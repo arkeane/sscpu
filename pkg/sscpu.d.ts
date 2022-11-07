@@ -9,6 +9,17 @@ export function sanity_check(): void;
 * @returns {any}
 */
 export function cpu_run(program: Uint16Array, data: Uint16Array): any;
+/**
+* @param {Uint16Array} program
+* @param {Uint16Array} data
+* @returns {any}
+*/
+export function cpu_init_for_step(program: Uint16Array, data: Uint16Array): any;
+/**
+* @param {any} jscpu
+* @returns {any}
+*/
+export function cpu_run_step(jscpu: any): any;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
@@ -16,7 +27,10 @@ export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly sanity_check: () => void;
   readonly cpu_run: (a: number, b: number, c: number, d: number) => number;
+  readonly cpu_init_for_step: (a: number, b: number, c: number, d: number) => number;
+  readonly cpu_run_step: (a: number) => number;
   readonly __wbindgen_malloc: (a: number) => number;
+  readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
   readonly __wbindgen_exn_store: (a: number) => void;
 }
 

@@ -202,3 +202,7 @@ pub fn decode_and_execute(cpu: &mut Cpu) -> bool {
 pub fn send_cpu_to_js(cpu: &Cpu) -> JsValue {
     JsValue::from_serde(cpu).unwrap()
 }
+
+pub fn get_cpu_from_js(jscpu: JsValue) -> Cpu{
+    jscpu.into_serde().unwrap()
+}
