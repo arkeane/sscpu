@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous"></script>
-    <script src="./index.js"></script>
+    <script type="module" src="./index.js"></script>
 </head>
 
 <body>
@@ -28,30 +28,15 @@
             </div>
         </nav>
     </header>
-    <script type="module">
-        import init, { sanity_check, runf_full, run_step, init } from "./pkg/sscpu.js";
-
-        await init();
-
-        window.exec = function exec(program, data) {
-            return runf_full(program, data);
-        }
-
-        window.exec_step = function exec_step(cpustate){
-            return run_step(cpustate);
-        }
-
-        window.init_cpu = function init_cpu(program, data){
-            return init(program, data);
-        }
-    </script>
 
     <div class="container">
         <div class="row">
             <div class="col">
                 <div class="container">
-                    <button type="button" class="btn btn-secondary" onclick="load_from_server()">Load SSASM example</button>
-                    <a href="./ssasm/conditional.ssasm" download="conditional.ssasm" class="btn btn-secondary">Download SSASM
+                    <button type="button" class="btn btn-secondary" id="example_load">Load SSASM
+                        example</button>
+                    <a href="./ssasm/conditional.ssasm" download="conditional.ssasm" class="btn btn-secondary">Download
+                        SSASM
                         example</a>
                 </div>
                 <br><label class="form-label" for="program">Instructions</label>
@@ -60,7 +45,7 @@
                 <textarea class="form-control" id="data" rows="10" cols="50"></textarea><br>
                 <div class="input-group">
                     <input type="file" class="form-control" id="ssasm" aria-describedby="inputGroupFileAddon04"
-                        aria-label="Upload" onchange="load_from_file()">
+                        aria-label="Upload">
                 </div>
             </div>
             <div class="col">
@@ -76,12 +61,13 @@
                 <label class="form-label" for="sp">SP</label>
                 <textarea disabled class="form-control" id="sp" rows="1"></textarea>
                 <!-- align button to the center -->
-                <br><div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                    <button class="btn btn-primary" type="button" onclick="initcpu()">Initialize Program</button>
-                    <button class="btn btn-primary" type="button" onclick="runstep()">Step Forward</button>
-                    <button class="btn btn-primary" type="button" onclick="run()">Run</button>
+                <br>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <button class="btn btn-primary" type="button" id="init">Initialize Program</button>
+                    <button class="btn btn-primary" type="button" id="run_step">Step Forward</button>
+                    <button class="btn btn-primary" type="button" id="run_full">Run</button>
                 </div>
-                
+
             </div>
         </div>
     </div>
