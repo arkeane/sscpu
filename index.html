@@ -29,20 +29,20 @@
         </nav>
     </header>
     <script type="module">
-        import init, { sanity_check, cpu_run, cpu_run_step, cpu_init_for_step } from "./pkg/sscpu.js";
+        import init, { sanity_check, runf_full, run_step, init } from "./pkg/sscpu.js";
 
         await init();
 
-        window.exec = function runcpu(program, data) {
-            return cpu_run(program, data);
+        window.exec = function exec(program, data) {
+            return runf_full(program, data);
         }
 
-        window.exec_step = function runcpustep(cpustate){
-            return cpu_run_step(cpustate);
+        window.exec_step = function exec_step(cpustate){
+            return run_step(cpustate);
         }
 
-        window.init_cpu = function initcpuforstep(program, data){
-            return cpu_init_for_step(program, data);
+        window.init_cpu = function init_cpu(program, data){
+            return init(program, data);
         }
     </script>
 

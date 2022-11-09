@@ -78,14 +78,14 @@ pub fn sanity_check() {
 
 #[wasm_bindgen]
 // function that takes two vec<u16> as instructions and data
-pub fn cpu_run(program: Vec<u16>, data: Vec<u16>) -> JsValue {
+pub fn run_full(program: Vec<u16>, data: Vec<u16>) -> JsValue {
     let mut cpu = isa::reset_cpu();
     run(&mut cpu, program, data);
     send_cpu_to_js(&cpu)
 }
 
 #[wasm_bindgen]
-pub fn cpu_init_for_step(program: Vec<u16>, data: Vec<u16>) -> JsValue {
+pub fn init(program: Vec<u16>, data: Vec<u16>) -> JsValue {
     let mut cpu = isa::reset_cpu();
     isa::load_instructions(&mut cpu, &program);
     isa::load_data(&mut cpu, &data);
@@ -93,7 +93,7 @@ pub fn cpu_init_for_step(program: Vec<u16>, data: Vec<u16>) -> JsValue {
 }
 
 #[wasm_bindgen]
-pub fn cpu_run_step(jscpu: JsValue) -> JsValue {
+pub fn run_step(jscpu: JsValue) -> JsValue {
     let mut cpu = get_cpu_from_js(jscpu);
     isa::decode_and_execute(&mut cpu);
     send_cpu_to_js(&cpu)
