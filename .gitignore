@@ -1,6 +1,2 @@
 /target
-/pkg/.gitignore
-/pkg/LICENSE.md
-/pkg/README.md
-/pkg/package.json
 /Cargo.lock

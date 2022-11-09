@@ -1,3 +1,7 @@
+import init, { run_full, run_step, init_state } from "./pkg/sscpu.js";
+
+await init();
+
 function run() {
     const program_text = document.getElementById("program").value;
     const data_text = document.getElementById("data").value;
@@ -7,7 +11,7 @@ function run() {
     // convert each line first 16 chars of data_text to a number from binary to decimal
     const data = data_text.split("\n").map(line => parseInt(line.substring(0, 16), 2));
 
-    JsValue = window.exec(program, data);
+    var JsValue = run_full(program, data);
     // send the json registers to registers textarea
     document.getElementById("registers").value = JSON.stringify(JsValue.registers);
     // send the json memory to memory textarea
@@ -29,7 +33,7 @@ function initcpu() {
     // convert each line first 16 chars of data_text to a number from binary to decimal
     const data = data_text.split("\n").map(line => parseInt(line.substring(0, 16), 2));
 
-    JsValue = window.init_cpu(program, data);
+    var JsValue = init_state(program, data);
     // send the json registers to registers textarea
     document.getElementById("registers").value = JSON.stringify(JsValue.registers);
     // send the json memory to memory textarea
@@ -58,7 +62,7 @@ function runstep() {
         sp: JSON.parse(sp.value)
     };
 
-    JsValue = window.exec_step(cpustate);
+    var JsValue = run_step(cpustate);
 
     // send the json registers to registers textarea
     document.getElementById("registers").value = JSON.stringify(JsValue.registers);
@@ -106,3 +110,9 @@ function load_from_server() {
     }
     request.send();
 }
+
+document.getElementById("run_full").addEventListener("click", run);
+document.getElementById("run_step").addEventListener("click", runstep);
+document.getElementById("init").addEventListener("click", initcpu);
+document.getElementById("example_load").addEventListener("click", load_from_server);
+document.getElementById("ssasm").addEventListener("change", load_from_file);
