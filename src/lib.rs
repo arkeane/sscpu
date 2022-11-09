@@ -85,7 +85,7 @@ pub fn run_full(program: Vec<u16>, data: Vec<u16>) -> JsValue {
 }
 
 #[wasm_bindgen]
-pub fn init(program: Vec<u16>, data: Vec<u16>) -> JsValue {
+pub fn init_state(program: Vec<u16>, data: Vec<u16>) -> JsValue {
     let mut cpu = isa::reset_cpu();
     isa::load_instructions(&mut cpu, &program);
     isa::load_data(&mut cpu, &data);
