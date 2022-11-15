@@ -7,6 +7,7 @@ extern "C" {
     pub fn alert(s: &str);
 
 }
+
 #[derive(Serialize, Deserialize)]
 pub struct Cpu {
     pub registers: [u16; 8], // 8 registers
@@ -166,7 +167,7 @@ fn or(cpu: &mut Cpu, r0: u16, r1: u16, r2: u16) {
 
 // NOT R0 and store in R1
 // 1110
-fn not(cpu: &mut Cpu,r0: u16, r1: u16) {
+fn not(cpu: &mut Cpu, r0: u16, r1: u16) {
     cpu.registers[r1 as usize] = !cpu.registers[r0 as usize];
 }
 
@@ -203,6 +204,6 @@ pub fn send_cpu_to_js(cpu: &Cpu) -> JsValue {
     JsValue::from_serde(cpu).unwrap()
 }
 
-pub fn get_cpu_from_js(jscpu: JsValue) -> Cpu{
+pub fn get_cpu_from_js(jscpu: JsValue) -> Cpu {
     jscpu.into_serde().unwrap()
 }

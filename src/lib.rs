@@ -1,4 +1,4 @@
-use isa::{send_cpu_to_js, get_cpu_from_js};
+use isa::{get_cpu_from_js, send_cpu_to_js};
 use wasm_bindgen::prelude::*;
 mod isa;
 
